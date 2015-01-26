@@ -23,6 +23,12 @@ namespace hex {
             var data = new byte[4096];
             var random = new Random(0);
             random.NextBytes(data);
+
+            vScrollBar1.Scroll += vScrollBar1_Scroll;
+            _dataInspector = new frmDataInspector();
+            _dataInspector.Show();
+            _dataInspector.DataView = new DataView(data);
+
             hexView1.Data = hexView2.Data = data;
 
             hexView1.SelectionChanged += hexView1_SelectionChanged;
@@ -30,9 +36,13 @@ namespace hex {
             hexView1.DataChanged += hexView1_DataChanged;
             hexView2.DataChanged += hexView2_DataChanged;
             this.Resize += Form1_Resize;
+        }
 
-            _dataInspector = new frmDataInspector();
-            _dataInspector.Show();
+        void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            hexView1.Offset = hexView2.Offset = e.NewValue;
+            hexView1.Invalidate();
+            hexView2.Invalidate();
         }
 
         void Form1_Resize(object sender, EventArgs e) {
@@ -42,8 +52,8 @@ namespace hex {
 
         void hexView2_SelectionChanged(object sender, EventArgs e)
         {
-            //_dataInspector.DataView.Offset = hexView2.SelectionStart;
-            //_dataInspector.UpdateView();
+            _dataInspector.DataView.Offset = hexView2.SelectionStart;
+            _dataInspector.UpdateView();
             hexView1.ClearSelection();
             hexView1.SelectionStart = hexView2.SelectionStart;
             hexView1.SelectionEnd = hexView2.SelectionEnd;
@@ -52,8 +62,8 @@ namespace hex {
 
         void hexView1_SelectionChanged(object sender, EventArgs e)
         {
-            //_dataInspector.DataView.Offset = hexView1.SelectionStart;
-            //_dataInspector.UpdateView();
+            _dataInspector.DataView.Offset = hexView1.SelectionStart;
+            _dataInspector.UpdateView();
             hexView2.ClearSelection();
             hexView2.SelectionStart = hexView1.SelectionStart;
             hexView2.SelectionEnd = hexView1.SelectionEnd;
@@ -89,6 +99,7 @@ namespace hex {
                     lblSize.Text = hexView1.Data.Length + " byte(s)";
                     hexView1.Invalidate();
                     hexView2.Invalidate();
+                    vScrollBar1.Maximum = hexView1.Data.Length / hexView1.NumberOfColumns;
                     //ReadBlock(0);
                 }
                 catch (Exception ex)

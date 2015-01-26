@@ -37,6 +37,8 @@ namespace hex {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public byte[] Data { get; set; }
 
+        public int Offset { get; set; }
+
         public HexView() {
             this.DoubleBuffered = true;
             NumberOfColumns = 15;
@@ -99,7 +101,7 @@ namespace hex {
 
         protected override void OnKeyPress(KeyPressEventArgs e) {
             if (ShowASCII) {
-                Data[SelectionStart] = (byte)e.KeyChar;
+                Data[Offset*NumberOfColumns + SelectionStart] = (byte)e.KeyChar;
                 SetCursor(SelectionStart + 1);
                 RepaintCells();
                 if (DataChanged != null)
@@ -113,7 +115,7 @@ namespace hex {
                     if (_buffer.Length == 2) {
                         byte val;
                         if (byte.TryParse(_buffer, NumberStyles.HexNumber, null, out val)) {
-                            Data[SelectionStart] = val;
+                            Data[Offset * NumberOfColumns + SelectionStart] = val;
                             SetCursor(SelectionStart + 1);
                             if (DataChanged != null)
                                 DataChanged(this, null);
@@ -160,7 +162,7 @@ namespace hex {
             var row = idx / NumberOfColumns;
             var visibleRows = ClientRectangle.Height / 24 - 1;
             if (row >= visibleRows)
-                return;
+                Offset = (visibleRows - row);
 
             var col = idx % NumberOfColumns;
             var width = ClientRectangle.Width / NumberOfColumns;
@@ -203,8 +205,8 @@ namespace hex {
                 e.Graphics.FillRectangle(Brushes.LightGray, new Rectangle(0, 0, ClientRectangle.Width, 24));
                 for (int i = 0; i < NumberOfColumns; i++) {
                     var rect = new Rectangle(i * width, 0, width, 24);
-                    TextRenderer.DrawText(e.Graphics, (i + 1).ToString("X"), Font, rect, ForeColor, Color.Transparent, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-                    ControlPaint.DrawBorder3D(e.Graphics, rect, Border3DStyle.Raised);
+                    TextRenderer.DrawText(e.Graphics, (i + 1).ToString("X"), Font, rect, Color.Black, Color.Transparent, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                    ControlPaint.DrawBorder3D(e.Graphics, rect, Border3DStyle.RaisedInner);
                 }
             }
             if (Data == null)
@@ -220,12 +222,16 @@ namespace hex {
             var cel = new Rectangle(0, 0, width, 24);
             for (int row = firstRow; row <= bottomRow; row++) {
                 for (int col = firstCol; col < lastCol; col++) {
-                    var idx = ((row - 1) * NumberOfColumns + col);
+                    var idx = ((Offset + row - 1) * NumberOfColumns + col);
                     if (idx >= Data.Length)
                         return;
                     cel.X = col * width;
                     cel.Y = row * 24;
                     bool selected = false;
+                    if (!Focused && idx == SelectionStart)
+                    {
+                        e.Graphics.FillRectangle(_highlightBrush, cel);
+                    }
                     if (SelectionStart != SelectionEnd && idx >= Math.Min(SelectionStart, SelectionEnd) && idx <= Math.Max(SelectionStart, SelectionEnd)) {
                         e.Graphics.FillRectangle(_highlightBrush, cel);
                         selected = true;
@@ -234,8 +240,21 @@ namespace hex {
                         e.Graphics.FillRectangle(new SolidBrush(Color.IndianRed), cel);
                         TextRenderer.DrawText(e.Graphics, _buffer, Font, cel, SystemColors.HighlightText, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                     }
-                    else {
-                        TextRenderer.DrawText(e.Graphics, ShowASCII ? ((char)Data[idx]).ToString() : Data[idx].ToString("X2"), Font, cel, selected ? SystemColors.HighlightText : ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                    else
+                    {
+                        string text;
+                        if (ShowASCII)
+                        {
+                            var chr = (char) Data[idx];
+                            if (chr < 33 || chr > 126)
+                                chr = '.';
+                            text = chr.ToString();
+                        }
+                        else
+                        {
+                            text = Data[idx].ToString("X2");
+                        }
+                        TextRenderer.DrawText(e.Graphics, text, Font, cel, selected ? SystemColors.HighlightText : ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                     }
                 }
             }

@@ -51,13 +51,13 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 555F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(437, 555);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(474, 555);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // vScrollBar1
             // 
             this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(437, 25);
+            this.vScrollBar1.Location = new System.Drawing.Point(474, 25);
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(17, 555);
             this.vScrollBar1.TabIndex = 1;
@@ -70,7 +70,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(454, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(491, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -100,14 +100,14 @@
             this.lblSize});
             this.statusStrip1.Location = new System.Drawing.Point(0, 580);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(454, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(491, 24);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // lblReady
             // 
             this.lblReady.Name = "lblReady";
-            this.lblReady.Size = new System.Drawing.Size(408, 19);
+            this.lblReady.Size = new System.Drawing.Size(445, 19);
             this.lblReady.Spring = true;
             this.lblReady.Text = "Ready";
             this.lblReady.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -122,10 +122,11 @@
             // 
             // hexView1
             // 
-            this.hexView1.BackColor = System.Drawing.Color.White;
+            this.hexView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.hexView1.Data = null;
             this.hexView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hexView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.hexView1.Location = new System.Drawing.Point(0, 0);
             this.hexView1.Margin = new System.Windows.Forms.Padding(0);
             this.hexView1.Name = "hexView1";
@@ -133,30 +134,31 @@
             this.hexView1.SelectionEnd = 0;
             this.hexView1.SelectionStart = 0;
             this.hexView1.ShowASCII = false;
-            this.hexView1.Size = new System.Drawing.Size(284, 555);
+            this.hexView1.Size = new System.Drawing.Size(308, 555);
             this.hexView1.TabIndex = 0;
             // 
             // hexView2
             // 
-            this.hexView2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.hexView2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.hexView2.Data = null;
             this.hexView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexView2.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hexView2.Location = new System.Drawing.Point(284, 0);
+            this.hexView2.ForeColor = System.Drawing.Color.Green;
+            this.hexView2.Location = new System.Drawing.Point(308, 0);
             this.hexView2.Margin = new System.Windows.Forms.Padding(0);
             this.hexView2.Name = "hexView2";
             this.hexView2.NumberOfColumns = 15;
             this.hexView2.SelectionEnd = 0;
             this.hexView2.SelectionStart = 0;
             this.hexView2.ShowASCII = true;
-            this.hexView2.Size = new System.Drawing.Size(153, 555);
+            this.hexView2.Size = new System.Drawing.Size(166, 555);
             this.hexView2.TabIndex = 1;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 604);
+            this.ClientSize = new System.Drawing.Size(491, 604);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.toolStrip1);
