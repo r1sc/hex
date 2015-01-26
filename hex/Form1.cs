@@ -18,7 +18,13 @@ namespace hex {
 
         private frmDataInspector _dataInspector;
         private FileStream _fileStream;
-        private void Form1_Load(object sender, EventArgs e) {
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            var data = new byte[4096];
+            var random = new Random(0);
+            random.NextBytes(data);
+            hexView1.Data = hexView2.Data = data;
+
             hexView1.SelectionChanged += hexView1_SelectionChanged;
             hexView2.SelectionChanged += hexView2_SelectionChanged;
             hexView1.DataChanged += hexView1_DataChanged;
@@ -38,18 +44,20 @@ namespace hex {
         {
             //_dataInspector.DataView.Offset = hexView2.SelectionStart;
             //_dataInspector.UpdateView();
+            hexView1.ClearSelection();
             hexView1.SelectionStart = hexView2.SelectionStart;
             hexView1.SelectionEnd = hexView2.SelectionEnd;
-            hexView1.Invalidate();
+            hexView1.RepaintCells();
         }
 
         void hexView1_SelectionChanged(object sender, EventArgs e)
         {
             //_dataInspector.DataView.Offset = hexView1.SelectionStart;
             //_dataInspector.UpdateView();
+            hexView2.ClearSelection();
             hexView2.SelectionStart = hexView1.SelectionStart;
             hexView2.SelectionEnd = hexView1.SelectionEnd;
-            hexView2.Invalidate();
+            hexView2.RepaintCells();
         }
 
         private void hexView1_Load(object sender, EventArgs e) {
@@ -57,11 +65,11 @@ namespace hex {
         }
         
         void hexView2_DataChanged(object sender, EventArgs e) {
-            hexView1.Invalidate();
+            //hexView1.Invalidate();
         }
 
         void hexView1_DataChanged(object sender, EventArgs e) {
-            hexView2.Invalidate();
+            //hexView2.Invalidate();
         }
 
         private void openToolStripButton_Click(object sender, EventArgs e) {
