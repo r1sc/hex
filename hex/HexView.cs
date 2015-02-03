@@ -33,15 +33,21 @@ namespace hex {
         public bool ShowASCII { get; set; }
         public int SelectionStart { get; set; }
         public int SelectionEnd { get; set; }
-        public int NumberOfColumns { get; set; }
+
+        public int NumberOfColumns {
+            get {
+                var width = GetWidth();
+                return this.ClientRectangle.Width / width;
+            }
+        }
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public byte[] Data { get; set; }
 
         public int Offset { get; set; }
 
         public HexView() {
-            this.DoubleBuffered = true;
-            NumberOfColumns = 15;
+            //this.DoubleBuffered = true;
             this.LostFocus += HexView_LostFocus;
         }
 
@@ -54,13 +60,13 @@ namespace hex {
             Debug.WriteLine("Recreating caret");
             _lostCaret = false;
             DestroyCaret();
-            var width = ClientRectangle.Width / NumberOfColumns;
+            var width = GetWidth();//ClientRectangle.Width / NumberOfColumns;
             CreateCaret(this.Handle, 0, width, 24);
         }
 
         private bool _selecting = false;
         protected override void OnMouseDown(MouseEventArgs e) {
-            var width = ClientRectangle.Width / NumberOfColumns;
+            var width = GetWidth();//ClientRectangle.Width / NumberOfColumns;
             var col = e.X / width;
             var row = e.Y / 24 - 1;
             var idx = row * NumberOfColumns + col;
@@ -78,7 +84,7 @@ namespace hex {
         private int _prevCol, _prevRow;
         protected override void OnMouseMove(MouseEventArgs e) {
             if (_selecting) {
-                var width = ClientRectangle.Width / NumberOfColumns;
+                var width = GetWidth();//ClientRectangle.Width / NumberOfColumns;
                 var col = e.X / width;
                 var row = e.Y / 24 - 1;
                 if (col == _prevCol && row == _prevRow)
@@ -101,7 +107,7 @@ namespace hex {
 
         protected override void OnKeyPress(KeyPressEventArgs e) {
             if (ShowASCII) {
-                Data[Offset*NumberOfColumns + SelectionStart] = (byte)e.KeyChar;
+                Data[Offset * NumberOfColumns + SelectionStart] = (byte)e.KeyChar;
                 SetCursor(SelectionStart + 1);
                 RepaintCells();
                 if (DataChanged != null)
@@ -165,7 +171,7 @@ namespace hex {
                 Offset = (visibleRows - row);
 
             var col = idx % NumberOfColumns;
-            var width = ClientRectangle.Width / NumberOfColumns;
+            var width = GetWidth();//ClientRectangle.Width / NumberOfColumns;
             SelectionStart = SelectionEnd = idx;
 
             if (_lostCaret)
@@ -178,11 +184,14 @@ namespace hex {
                 SelectionChanged(this, null);
         }
 
-        private Rectangle GetSelectionRectangle()
-        {
+        private int GetWidth() {
+            return (int)(ShowASCII ? Font.Size : Font.Size * 2);
+        }
+
+        private Rectangle GetSelectionRectangle() {
             var rowStart = Math.Min(SelectionStart, SelectionEnd) / NumberOfColumns;
             var rowEnd = Math.Max(SelectionStart, SelectionEnd) / NumberOfColumns + 1;
-            var width = ClientRectangle.Width / NumberOfColumns;
+            var width = GetWidth();//ClientRectangle.Width / NumberOfColumns;
             return new Rectangle(0, rowStart * 24 + 24, ClientRectangle.Width, (rowEnd - rowStart) * 24 + 24);
         }
 
@@ -190,22 +199,22 @@ namespace hex {
             Invalidate(GetSelectionRectangle());
         }
 
-        public void ClearSelection()
-        {
+        public void ClearSelection() {
             var rect = GetSelectionRectangle();
             SelectionEnd = SelectionStart;
             Invalidate(rect);
         }
 
         protected override void OnPaint(PaintEventArgs e) {
-            var width = ClientRectangle.Width / NumberOfColumns;
+            var width = GetWidth();//ClientRectangle.Width / NumberOfColumns;
 
             // Column headers
             if (e.ClipRectangle.Top == 0) {
                 e.Graphics.FillRectangle(Brushes.LightGray, new Rectangle(0, 0, ClientRectangle.Width, 24));
                 for (int i = 0; i < NumberOfColumns; i++) {
                     var rect = new Rectangle(i * width, 0, width, 24);
-                    TextRenderer.DrawText(e.Graphics, (i + 1).ToString("X"), Font, rect, Color.Black, Color.Transparent, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                    var num = ShowASCII ? ((i % 15) + 1) : (i + 1);
+                    TextRenderer.DrawText(e.Graphics, num.ToString("X"), Font, rect, Color.Black, Color.Transparent, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                     ControlPaint.DrawBorder3D(e.Graphics, rect, Border3DStyle.RaisedInner);
                 }
             }
@@ -228,30 +237,26 @@ namespace hex {
                     cel.X = col * width;
                     cel.Y = row * 24;
                     bool selected = false;
-                    if (!Focused && idx == SelectionStart)
-                    {
+                    if (!Focused && idx == SelectionStart) {
                         e.Graphics.FillRectangle(_highlightBrush, cel);
                     }
                     if (SelectionStart != SelectionEnd && idx >= Math.Min(SelectionStart, SelectionEnd) && idx <= Math.Max(SelectionStart, SelectionEnd)) {
                         e.Graphics.FillRectangle(_highlightBrush, cel);
                         selected = true;
                     }
-                    if (_buffer != string.Empty && idx == SelectionStart) {
+                    if (_buffer != string.Empty && idx == (Offset * NumberOfColumns + SelectionStart)) {
                         e.Graphics.FillRectangle(new SolidBrush(Color.IndianRed), cel);
                         TextRenderer.DrawText(e.Graphics, _buffer, Font, cel, SystemColors.HighlightText, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                     }
-                    else
-                    {
+                    else {
                         string text;
-                        if (ShowASCII)
-                        {
-                            var chr = (char) Data[idx];
+                        if (ShowASCII) {
+                            var chr = (char)Data[idx];
                             if (chr < 33 || chr > 126)
                                 chr = '.';
                             text = chr.ToString();
                         }
-                        else
-                        {
+                        else {
                             text = Data[idx].ToString("X2");
                         }
                         TextRenderer.DrawText(e.Graphics, text, Font, cel, selected ? SystemColors.HighlightText : ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);

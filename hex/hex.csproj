@@ -50,11 +50,20 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTest2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTest2.Designer.cs">
+      <DependentUpon>FormTest2.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDataInspector.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmDataInspector.Designer.cs">
       <DependentUpon>frmDataInspector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Hex2.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HexView.cs">
       <SubType>UserControl</SubType>
@@ -63,6 +72,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTest2.resx">
+      <DependentUpon>FormTest2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDataInspector.resx">
       <DependentUpon>frmDataInspector.cs</DependentUpon>

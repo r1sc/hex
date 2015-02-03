@@ -41,8 +41,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.02809F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.97191F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
             this.tableLayoutPanel1.Controls.Add(this.hexView1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.hexView2, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -50,7 +50,6 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 555F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(474, 555);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -122,36 +121,36 @@
             // 
             // hexView1
             // 
-            this.hexView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.hexView1.BackColor = System.Drawing.Color.White;
             this.hexView1.Data = null;
             this.hexView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hexView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.hexView1.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hexView1.ForeColor = System.Drawing.Color.Black;
             this.hexView1.Location = new System.Drawing.Point(0, 0);
             this.hexView1.Margin = new System.Windows.Forms.Padding(0);
             this.hexView1.Name = "hexView1";
-            this.hexView1.NumberOfColumns = 15;
+            this.hexView1.Offset = 0;
             this.hexView1.SelectionEnd = 0;
             this.hexView1.SelectionStart = 0;
             this.hexView1.ShowASCII = false;
-            this.hexView1.Size = new System.Drawing.Size(308, 555);
+            this.hexView1.Size = new System.Drawing.Size(317, 555);
             this.hexView1.TabIndex = 0;
             // 
             // hexView2
             // 
-            this.hexView2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.hexView2.BackColor = System.Drawing.Color.White;
             this.hexView2.Data = null;
             this.hexView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexView2.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hexView2.ForeColor = System.Drawing.Color.Green;
-            this.hexView2.Location = new System.Drawing.Point(308, 0);
+            this.hexView2.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hexView2.ForeColor = System.Drawing.Color.Black;
+            this.hexView2.Location = new System.Drawing.Point(317, 0);
             this.hexView2.Margin = new System.Windows.Forms.Padding(0);
             this.hexView2.Name = "hexView2";
-            this.hexView2.NumberOfColumns = 15;
+            this.hexView2.Offset = 0;
             this.hexView2.SelectionEnd = 0;
             this.hexView2.SelectionStart = 0;
             this.hexView2.ShowASCII = true;
-            this.hexView2.Size = new System.Drawing.Size(166, 555);
+            this.hexView2.Size = new System.Drawing.Size(157, 555);
             this.hexView2.TabIndex = 1;
             // 
             // Form1
