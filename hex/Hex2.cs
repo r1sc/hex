@@ -4,12 +4,27 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace hex {
     class Hex2 : UserControl {
+        #region Win32
+        [DllImport("User32.dll")]
+        static extern bool CreateCaret(IntPtr hWnd, int hBitmap, int nWidth, int nHeight);
+        [DllImport("User32.dll")]
+        static extern bool SetCaretPos(int x, int y);
+        [DllImport("User32.dll")]
+        static extern bool DestroyCaret();
+        [DllImport("User32.dll")]
+        static extern bool ShowCaret(IntPtr hWnd);
+        [DllImport("User32.dll")]
+        static extern bool HideCaret(IntPtr hWnd);
+        #endregion
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public byte[] Data { get; set; }
 
@@ -37,9 +52,36 @@ namespace hex {
             return (int)c;
         }
 
-        protected override void OnLoad(EventArgs e)
+        private int _lastCaretType = 0;
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnLoad(e);
+            int charWidth = (int)(Font.Size*2);
+            var leftViewWidth = GetNumberOfColumns()*charWidth;
+            if (e.X < leftViewWidth)
+            {
+                if (_lastCaretType != 1)
+                {
+                    CreateCaret(Handle, 0, (int) (Font.Size*2), 24);
+                    _lastCaretType = 1;
+                }
+                int row = e.Y/24;
+                int col = e.X/(int)(Font.Size*2);
+                SetCaretPos(col * (int)(Font.Size * 2), row * 24);
+            }
+            else
+            {
+                if (_lastCaretType != 2)
+                {
+                    CreateCaret(Handle, 0, (int) Font.Size, 24);
+                    _lastCaretType = 2;
+                }
+
+                int row = e.Y / 24;
+                int col = e.X / (int)(Font.Size);
+                SetCaretPos(col * (int)Font.Size, row * 24);
+            }
+            ShowCaret(Handle);
+            base.OnMouseDown(e);
         }
 
         private int _oldNumColumns;
