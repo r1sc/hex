@@ -30,10 +30,11 @@ namespace hex {
         private readonly VScrollBar _scrollBar;
 
         public Hex2() {
-            Data = new byte[1280];
+            /*Data = new byte[1280];
             Random r = new Random();
             r.NextBytes(Data);
-
+            */
+            Data = new byte[0];
             _scrollBar = new VScrollBar();
             _scrollBar.Dock = DockStyle.Right;
             _scrollBar.Scroll += _scrollBar_Scroll;
