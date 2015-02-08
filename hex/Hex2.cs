@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace hex {
@@ -25,6 +20,8 @@ namespace hex {
         static extern bool HideCaret(IntPtr hWnd);
         #endregion
 
+        public bool AsciiSelected { get; set; }
+        public int CurrentPos { get; private set; }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public byte[] Data { get; set; }
 
@@ -49,38 +46,90 @@ namespace hex {
             var width = Font.Size;
             var u = width * 2 + width;
             var c = ClientRectangle.Width / u;
-            return (int)c;
+            return (int)c - 1;
         }
 
-        private int _lastCaretType = 0;
-        protected override void OnMouseDown(MouseEventArgs e)
+        public void UpdateCaret(int newPos)
         {
-            int charWidth = (int)(Font.Size*2);
-            var leftViewWidth = GetNumberOfColumns()*charWidth;
-            if (e.X < leftViewWidth)
+            if (newPos < 0 || newPos >= Data.Length)
+                return;
+            CurrentPos = newPos;
+            var numColumns = GetNumberOfColumns();
+            var row = CurrentPos / numColumns + 1;
+            var col = CurrentPos % numColumns;
+
+            var screenRow = row - _scrollBar.Value;
+            var visibleRows = ClientRectangle.Height/24 - 1;
+            if (screenRow <= 0)
             {
-                if (_lastCaretType != 1)
-                {
-                    CreateCaret(Handle, 0, (int) (Font.Size*2), 24);
-                    _lastCaretType = 1;
-                }
-                int row = e.Y/24;
-                int col = e.X/(int)(Font.Size*2);
-                SetCaretPos(col * (int)(Font.Size * 2), row * 24);
+                _scrollBar.Value = row-1;
+                screenRow = 1;
+                Invalidate();
             }
-            else
+            if (screenRow > visibleRows)
             {
-                if (_lastCaretType != 2)
-                {
-                    CreateCaret(Handle, 0, (int) Font.Size, 24);
+                _scrollBar.Value = (row - visibleRows);
+                screenRow = row - _scrollBar.Value;
+                Invalidate();
+            }
+
+            if (AsciiSelected) {
+                if (_lastCaretType != 2) {
+                    CreateCaret(Handle, 0, (int)Font.Size, 24);
                     _lastCaretType = 2;
                 }
-
-                int row = e.Y / 24;
-                int col = e.X / (int)(Font.Size);
-                SetCaretPos(col * (int)Font.Size, row * 24);
+                SetCaretPos((numColumns * (int)Font.Size * 2) + (int)Font.Size + col * (int)Font.Size, screenRow * 24);
+                ShowCaret(Handle);
             }
-            ShowCaret(Handle);
+            else {
+                if (_lastCaretType != 1) {
+                    CreateCaret(Handle, 0, (int)(Font.Size * 2), 24);
+                    _lastCaretType = 1;
+                }
+                SetCaretPos(col * (int)(Font.Size * 2), screenRow * 24);
+                ShowCaret(Handle);
+            }
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Left)
+            {
+                UpdateCaret(CurrentPos-1);
+                return true;
+            }
+            if (keyData == Keys.Right)
+            {
+                UpdateCaret(CurrentPos + 1);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private int _lastCaretType;
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            var numColumns = GetNumberOfColumns();
+            var charWidth = (int)(Font.Size*2);
+            var leftViewWidth = numColumns*charWidth;
+            int row = e.Y / 24 + _scrollBar.Value - 1;
+
+            int col = e.X/(int) (Font.Size*2);
+            if (e.X >= leftViewWidth)
+                col = (e.X - leftViewWidth) / (int)(Font.Size) - 1;
+
+            var idx = row*numColumns + col;
+            if (e.X < leftViewWidth)
+            {
+                AsciiSelected = false;
+                UpdateCaret(idx);
+            }
+            else if (col >= 0 && col < numColumns)
+            {
+                AsciiSelected = true;
+                UpdateCaret(idx);
+            }
+
             base.OnMouseDown(e);
         }
 
@@ -135,7 +184,7 @@ namespace hex {
             e.Graphics.DrawLine(Pens.Silver, lineX, 0, lineX, ClientRectangle.Bottom);
 
             int startRow = Math.Max(1, e.ClipRectangle.Top/24);
-            int endRow = e.ClipRectangle.Bottom/24 + 1;
+            int endRow = e.ClipRectangle.Bottom/24 ;
             int aidx, idx;
             aidx = idx = numColumns * (startRow + _scrollBar.Value - 1);
             for (int row = startRow; row < endRow; row++)
