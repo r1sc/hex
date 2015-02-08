@@ -21,12 +21,13 @@ namespace hex {
         static extern bool HideCaret(IntPtr hWnd);
         #endregion
 
+        public event EventHandler<int> PositionChanged;
         public bool AsciiSelected { get; set; }
         public int CurrentPos { get; private set; }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public byte[] Data { get; set; }
 
-        private VScrollBar _scrollBar;
+        private readonly VScrollBar _scrollBar;
 
         public Hex2() {
             Data = new byte[1280];
@@ -101,12 +102,15 @@ namespace hex {
                 SetCaretPos(col * (int)(Font.Size * 2), screenRow * 24);
             }
             ShowCaret(Handle);
+            
+            if (PositionChanged != null)
+                PositionChanged(this, CurrentPos);
         }
 
         public void PositionCursor(int newpos) {
             MakeSurePositionIsVisible(newpos);
             UpdateCaret(newpos);
-        }
+        }        
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (keyData == Keys.Left) {
@@ -199,6 +203,7 @@ namespace hex {
                 _oldNumColumns = numColumns;
                 _oldVisibleRows = visibleRows;
                 UpdateScrollbar();
+                PositionCursor(CurrentPos);
                 Invalidate();
             }
 
@@ -216,11 +221,13 @@ namespace hex {
         }
 
         protected override void OnPaint(PaintEventArgs e) {
-            Debug.WriteLine("ClipRect: " + e.ClipRectangle);
+            //Debug.WriteLine("ClipRect: " + e.ClipRectangle);
+            //e.Graphics.DrawRectangle(Pens.Red, e.ClipRectangle);
+
             var numColumns = GetNumberOfColumns();
             var charWidth = (int)Font.Size;
             var rect = new Rectangle(0, 0, charWidth * 2, 24);
-            //e.Graphics.DrawRectangle(Pens.Red, e.ClipRectangle);
+            
             if (e.ClipRectangle.Top == 0) {
                 e.Graphics.FillRectangle(Brushes.LightGray, new Rectangle(0, 0, ClientRectangle.Width, 24));
 
@@ -271,7 +278,11 @@ namespace hex {
             }
         }
 
-        public void SetData(byte[] data) {
+        public void SetData(byte[] data)
+        {
+            _lastCaretType = 0;
+            DestroyCaret();
+
             Data = data;
             UpdateScrollbar();
             _scrollBar.Value = 0;

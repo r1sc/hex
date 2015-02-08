@@ -24,8 +24,205 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTest2));
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblByte = new System.Windows.Forms.Label();
+            this.lblInt32 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblUint16 = new System.Windows.Forms.Label();
+            this.lblInt16 = new System.Windows.Forms.Label();
+            this.lblUint32 = new System.Windows.Forms.Label();
+            this.lblFloat = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.hex21 = new hex.Hex2();
+            this.panel1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.tableLayoutPanel1);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Location = new System.Drawing.Point(543, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(193, 343);
+            this.panel1.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.InsetDouble;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.89474F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.10526F));
+            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblByte, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblInt32, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblUint16, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblInt16, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblUint32, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblFloat, 1, 5);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 20);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(193, 130);
+            this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 108);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(30, 13);
+            this.label6.TabIndex = 16;
+            this.label6.Text = "Float";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 87);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(31, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Int32";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 66);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(39, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "UInt32";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 45);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(31, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Int16";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(39, 13);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "UInt16";
+            // 
+            // lblByte
+            // 
+            this.lblByte.BackColor = System.Drawing.SystemColors.Control;
+            this.lblByte.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblByte.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblByte.ForeColor = System.Drawing.Color.Black;
+            this.lblByte.Location = new System.Drawing.Point(60, 3);
+            this.lblByte.Name = "lblByte";
+            this.lblByte.Size = new System.Drawing.Size(127, 18);
+            this.lblByte.TabIndex = 2;
+            this.lblByte.Text = "Byte";
+            // 
+            // lblInt32
+            // 
+            this.lblInt32.BackColor = System.Drawing.SystemColors.Control;
+            this.lblInt32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblInt32.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInt32.ForeColor = System.Drawing.Color.Black;
+            this.lblInt32.Location = new System.Drawing.Point(60, 87);
+            this.lblInt32.Name = "lblInt32";
+            this.lblInt32.Size = new System.Drawing.Size(127, 18);
+            this.lblInt32.TabIndex = 9;
+            this.lblInt32.Text = "Byte";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Byte";
+            // 
+            // lblUint16
+            // 
+            this.lblUint16.BackColor = System.Drawing.SystemColors.Control;
+            this.lblUint16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUint16.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUint16.ForeColor = System.Drawing.Color.Black;
+            this.lblUint16.Location = new System.Drawing.Point(60, 24);
+            this.lblUint16.Name = "lblUint16";
+            this.lblUint16.Size = new System.Drawing.Size(127, 18);
+            this.lblUint16.TabIndex = 4;
+            this.lblUint16.Text = "Byte";
+            // 
+            // lblInt16
+            // 
+            this.lblInt16.BackColor = System.Drawing.SystemColors.Control;
+            this.lblInt16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblInt16.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInt16.ForeColor = System.Drawing.Color.Black;
+            this.lblInt16.Location = new System.Drawing.Point(60, 45);
+            this.lblInt16.Name = "lblInt16";
+            this.lblInt16.Size = new System.Drawing.Size(127, 18);
+            this.lblInt16.TabIndex = 5;
+            this.lblInt16.Text = "Byte";
+            // 
+            // lblUint32
+            // 
+            this.lblUint32.BackColor = System.Drawing.SystemColors.Control;
+            this.lblUint32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUint32.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUint32.ForeColor = System.Drawing.Color.Black;
+            this.lblUint32.Location = new System.Drawing.Point(60, 66);
+            this.lblUint32.Name = "lblUint32";
+            this.lblUint32.Size = new System.Drawing.Size(127, 18);
+            this.lblUint32.TabIndex = 7;
+            this.lblUint32.Text = "Byte";
+            // 
+            // lblFloat
+            // 
+            this.lblFloat.BackColor = System.Drawing.SystemColors.Control;
+            this.lblFloat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFloat.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFloat.ForeColor = System.Drawing.Color.Black;
+            this.lblFloat.Location = new System.Drawing.Point(60, 108);
+            this.lblFloat.Name = "lblFloat";
+            this.lblFloat.Size = new System.Drawing.Size(127, 19);
+            this.lblFloat.TabIndex = 11;
+            this.lblFloat.Text = "Byte";
+            // 
+            // label7
+            // 
+            this.label7.BackColor = System.Drawing.Color.LightGray;
+            this.label7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label7.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(0, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(193, 20);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Data inspector";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // hex21
             // 
@@ -1316,19 +1513,23 @@
             this.hex21.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hex21.Location = new System.Drawing.Point(0, 0);
             this.hex21.Name = "hex21";
-            this.hex21.Size = new System.Drawing.Size(502, 343);
+            this.hex21.Size = new System.Drawing.Size(543, 343);
             this.hex21.TabIndex = 0;
             // 
             // FormTest2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 343);
+            this.ClientSize = new System.Drawing.Size(736, 343);
             this.Controls.Add(this.hex21);
+            this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormTest2";
             this.Text = "Base10";
             this.Load += new System.EventHandler(this.FormTest2_Load);
+            this.panel1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1336,5 +1537,20 @@
         #endregion
 
         private Hex2 hex21;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblByte;
+        private System.Windows.Forms.Label lblInt32;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblUint16;
+        private System.Windows.Forms.Label lblInt16;
+        private System.Windows.Forms.Label lblUint32;
+        private System.Windows.Forms.Label lblFloat;
+        private System.Windows.Forms.Label label7;
     }
 }
