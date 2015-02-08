@@ -23,11 +23,13 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTest2));
             this.hex21 = new hex.Hex2();
             this.SuspendLayout();
             // 
             // hex21
             // 
+            this.hex21.AsciiSelected = false;
             this.hex21.BackColor = System.Drawing.Color.White;
             this.hex21.Data = new byte[] {
         ((byte)(255)),
@@ -1316,7 +1318,6 @@
             this.hex21.Name = "hex21";
             this.hex21.Size = new System.Drawing.Size(502, 343);
             this.hex21.TabIndex = 0;
-            this.hex21.Text = "hex21";
             // 
             // FormTest2
             // 
@@ -1324,8 +1325,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(502, 343);
             this.Controls.Add(this.hex21);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormTest2";
-            this.Text = "FormTest2";
+            this.Text = "Base10";
+            this.Load += new System.EventHandler(this.FormTest2_Load);
             this.ResumeLayout(false);
 
         }
