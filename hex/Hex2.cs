@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
+using System.Collections.Generic;
 namespace hex {
     class Hex2 : UserControl {
         #region Win32
@@ -26,7 +26,9 @@ namespace hex {
         public int CurrentPos { get; private set; }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public byte[] Data { get; set; }
-
+        public enum dataTypes {Byte, UInt16, Int16, UInt32, Int32, Float };
+        public List<Int32> QueryHitAddresses { get; set; }
+        
         private readonly VScrollBar _scrollBar;
 
         public Hex2() {
@@ -35,6 +37,7 @@ namespace hex {
             r.NextBytes(Data);
             */
             Data = new byte[0];
+            QueryHitAddresses = new List<Int32>();
             _scrollBar = new VScrollBar();
             _scrollBar.Dock = DockStyle.Right;
             _scrollBar.Scroll += _scrollBar_Scroll;
@@ -147,7 +150,7 @@ namespace hex {
                 }
                 e.Handled = true;
             }
-            else if (AsciiSelected) {
+            else if (AsciiSelected && Data.Length > 0) {
                 Data[CurrentPos] = (byte)e.KeyChar;
                 RedrawCurrentByte();
                 PositionCursor(CurrentPos + 1);
@@ -233,7 +236,7 @@ namespace hex {
                 e.Graphics.FillRectangle(Brushes.LightGray, new Rectangle(0, 0, ClientRectangle.Width, 24));
 
                 for (int i = 0; i < numColumns; i++) {
-                    var num = (i + 1);
+                    var num = (i );
                     TextRenderer.DrawText(e.Graphics, num.ToString("X"), Font, rect, Color.Black, Color.Transparent, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                     ControlPaint.DrawBorder3D(e.Graphics, rect, Border3DStyle.RaisedInner);
                     rect.X += charWidth * 2;
@@ -242,7 +245,7 @@ namespace hex {
 
                 rect.Width = charWidth;
                 for (int i = 0; i < numColumns; i++) {
-                    var num = ((i % 15) + 1);
+                    var num = ((i % 16));
                     TextRenderer.DrawText(e.Graphics, num.ToString("X"), Font, rect, Color.Black, Color.Transparent, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                     rect.X += charWidth;
                 }
@@ -279,6 +282,8 @@ namespace hex {
             }
         }
 
+
+
         public void SetData(byte[] data)
         {
             _lastCaretType = 0;
@@ -289,6 +294,129 @@ namespace hex {
             _scrollBar.Value = 0;
             PositionCursor(0);
             Invalidate();
+        }
+
+
+
+        public void Search(String searchText, int dataType, bool aligned)
+        {
+            QueryHitAddresses.Clear();
+
+            int totalBytes = Data.Length;
+            byte[] needle = setNeedle(searchText, dataType);
+
+            
+            int jumpLength;
+            if (aligned) jumpLength = 1;
+            else jumpLength = GetAmountOfByte(dataType);
+            //if (dataType == (int)dataTypes.Byte) { jumpLength = needle.Length;} //bytes treated differently since there can be multiple
+            
+           
+            for (Int32 address = 0; address < totalBytes; address += jumpLength) //address in file
+            {
+
+                int offset = 0;
+                while ( offset < jumpLength && Data[address + offset] == needle[offset]) //offset of address
+                {
+                    offset++;
+                }
+
+                if (offset == jumpLength) //all bytes matched
+                {
+                    QueryHitAddresses.Add(address);
+                }
+            }
+
+
+
+        }
+
+        private byte[] setNeedle(String searchText, int dataType)
+        {
+            switch (dataType)
+            {
+                case (int)Hex2.dataTypes.Byte:
+                    {
+                        return ConvertStringOfHexNumbersToBytes(searchText);
+                    }
+                case (int)Hex2.dataTypes.UInt16:
+                    {
+                        return BitConverter.GetBytes(Convert.ToUInt16(searchText));
+                    }
+                case (int)Hex2.dataTypes.Int16:
+                    {
+                        return BitConverter.GetBytes(Convert.ToInt16(searchText));
+                    }
+                case (int)Hex2.dataTypes.UInt32:
+                    {
+                        return BitConverter.GetBytes(Convert.ToUInt32(searchText));
+                    }
+                case (int)Hex2.dataTypes.Int32:
+                    {
+                        return BitConverter.GetBytes(Convert.ToInt32(searchText));
+                    }
+                case (int)Hex2.dataTypes.Float:
+                    {
+                        return BitConverter.GetBytes(Convert.ToSingle(searchText));
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
+        }
+
+        private byte[] ConvertStringOfHexNumbersToBytes(string s)
+        {
+            byte[] byteArray = new byte[s.Length / 2];
+            for (int index = 0; index < s.Length; index += 2)
+            {
+                int char1Value = GetHexCharValue(s[index]);
+                int char2Value = GetHexCharValue(s[index + 1]);
+
+                byteArray[index / 2] = Convert.ToByte(char1Value * 16 + char2Value);
+            }
+            return byteArray;
+        }
+
+        private int GetHexCharValue(char c)
+        {
+            switch (c)
+            {
+                case '0': return 0;
+                case '1': return 1;
+                case '2': return 2;
+                case '3': return 3;
+                case '4': return 4;
+                case '5': return 5;
+                case '6': return 6;
+                case '7': return 7;
+                case '8': return 8;
+                case '9': return 9;
+                case 'A': return 10;
+                case 'B': return 11;
+                case 'C': return 12;
+                case 'D': return 13;
+                case 'E': return 14;
+                case 'F': return 15;
+                default: return -1;
+            }
+        }
+
+
+        private int GetAmountOfByte(int dataType)
+        {
+            switch (dataType)
+            {
+                case (int)dataTypes.Byte : return 1;
+                case (int)dataTypes.UInt16: return 2;
+                case (int)dataTypes.Int16: return 2;
+                case (int)dataTypes.UInt32: return 4;
+                case (int)dataTypes.Int32: return 4;
+                case (int)dataTypes.Float: return 4;
+                default: return -1;
+            }
+ 
         }
     }
 }

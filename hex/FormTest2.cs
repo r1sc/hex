@@ -20,6 +20,8 @@ namespace hex {
             hex21.PositionChanged += hex21_PositionChanged;
             this.DragEnter += FormTest2_DragEnter;
             this.DragDrop += FormTest2_DragDrop;
+            typeComboBox.SelectedIndex = 0;
+       
         }
 
 
@@ -63,6 +65,18 @@ namespace hex {
                     LoadData(ofd.FileName);
                 }
             }
+            else if (e.Control && e.KeyCode == Keys.S){
+                var sfd = new SaveFileDialog
+                {
+                    Filter = "All Files (*.*)|*.*"
+                };
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    SaveData(sfd.FileName);
+                }
+            }
+          
+              
         }
 
         private void LoadData(string fileName)
@@ -70,6 +84,38 @@ namespace hex {
             hex21.SetData(File.ReadAllBytes(fileName));
             lblStatusSize.Text = hex21.Data.Length.ToString() + " bytes";
             panel1.Enabled = true;
+            searchPanel.Enabled = true;
         }
+
+        private void SaveData(string fileName)
+        {
+            File.WriteAllBytes(fileName,hex21.Data);
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+
+            string searchText = searchTextBox.Text; 
+            ///sanitize
+            int dataType = typeComboBox.SelectedIndex;
+            bool aligned = alignedSearchCheckBox.Checked;
+           
+
+            hex21.Search(searchText, dataType, aligned);
+
+            updateResultsListBox();
+          
+        }
+        private void updateResultsListBox()
+        {
+            foreach (Int32 i in hex21.QueryHitAddresses)
+            {
+                searchResultsListBox.Items.Clear();
+                searchResultsListBox.Items.Add(i.ToString("X8"));
+            }
+        }
+
+     
+
     }
 }

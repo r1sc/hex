@@ -39,6 +39,14 @@
             this.lblUint32 = new System.Windows.Forms.Label();
             this.lblFloat = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.searchPanel = new System.Windows.Forms.Panel();
+            this.alignedSearchCheckBox = new System.Windows.Forms.CheckBox();
+            this.searchButton = new System.Windows.Forms.Button();
+            this.searchResultsListBox = new System.Windows.Forms.ListBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.typeComboBox = new System.Windows.Forms.ComboBox();
+            this.searchTextBox = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatusSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusCol = new System.Windows.Forms.ToolStripStatusLabel();
@@ -47,16 +55,18 @@
             this.hex21 = new hex.Hex2();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.searchPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.searchPanel);
             this.panel1.Controls.Add(this.tableLayoutPanel1);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Enabled = false;
-            this.panel1.Location = new System.Drawing.Point(543, 0);
+            this.panel1.Location = new System.Drawing.Point(578, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(193, 501);
             this.panel1.TabIndex = 1;
@@ -231,6 +241,102 @@
             this.label7.Text = "Data inspector";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // searchPanel
+            // 
+            this.searchPanel.Controls.Add(this.alignedSearchCheckBox);
+            this.searchPanel.Controls.Add(this.searchButton);
+            this.searchPanel.Controls.Add(this.searchResultsListBox);
+            this.searchPanel.Controls.Add(this.label9);
+            this.searchPanel.Controls.Add(this.label8);
+            this.searchPanel.Controls.Add(this.typeComboBox);
+            this.searchPanel.Controls.Add(this.searchTextBox);
+            this.searchPanel.Enabled = false;
+            this.searchPanel.Location = new System.Drawing.Point(0, 150);
+            this.searchPanel.Name = "searchPanel";
+            this.searchPanel.Size = new System.Drawing.Size(193, 351);
+            this.searchPanel.TabIndex = 11;
+            // 
+            // alignedSearchCheckBox
+            // 
+            this.alignedSearchCheckBox.AutoSize = true;
+            this.alignedSearchCheckBox.Location = new System.Drawing.Point(124, 37);
+            this.alignedSearchCheckBox.Name = "alignedSearchCheckBox";
+            this.alignedSearchCheckBox.Size = new System.Drawing.Size(61, 17);
+            this.alignedSearchCheckBox.TabIndex = 17;
+            this.alignedSearchCheckBox.Text = "Aligned";
+            this.alignedSearchCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // searchButton
+            // 
+            this.searchButton.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchButton.Location = new System.Drawing.Point(63, 118);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(61, 23);
+            this.searchButton.TabIndex = 16;
+            this.searchButton.Text = "Search";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            // 
+            // searchResultsListBox
+            // 
+            this.searchResultsListBox.BackColor = System.Drawing.SystemColors.Control;
+            this.searchResultsListBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchResultsListBox.FormattingEnabled = true;
+            this.searchResultsListBox.ItemHeight = 14;
+            this.searchResultsListBox.Location = new System.Drawing.Point(7, 148);
+            this.searchResultsListBox.Name = "searchResultsListBox";
+            this.searchResultsListBox.Size = new System.Drawing.Size(178, 200);
+            this.searchResultsListBox.TabIndex = 15;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(7, 35);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 14);
+            this.label9.TabIndex = 14;
+            this.label9.Text = "Type";
+            // 
+            // label8
+            // 
+            this.label8.BackColor = System.Drawing.Color.LightGray;
+            this.label8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label8.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(0, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(193, 20);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "Search";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // typeComboBox
+            // 
+            this.typeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.typeComboBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.typeComboBox.FormattingEnabled = true;
+            this.typeComboBox.Items.AddRange(new object[] {
+            "Byte",
+            "UInt16",
+            "Int16",
+            "UInt32",
+            "Int32",
+            "Float"});
+            this.typeComboBox.Location = new System.Drawing.Point(48, 32);
+            this.typeComboBox.Name = "typeComboBox";
+            this.typeComboBox.Size = new System.Drawing.Size(70, 22);
+            this.typeComboBox.TabIndex = 1;
+            // 
+            // searchTextBox
+            // 
+            this.searchTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchTextBox.Location = new System.Drawing.Point(7, 60);
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(178, 52);
+            this.searchTextBox.TabIndex = 0;
+            this.searchTextBox.Text = "";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -240,14 +346,14 @@
             this.lblStatusPosition});
             this.statusStrip1.Location = new System.Drawing.Point(0, 501);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(736, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(771, 22);
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // lblStatusSize
             // 
             this.lblStatusSize.Name = "lblStatusSize";
-            this.lblStatusSize.Size = new System.Drawing.Size(721, 17);
+            this.lblStatusSize.Size = new System.Drawing.Size(756, 17);
             this.lblStatusSize.Spring = true;
             this.lblStatusSize.Text = "Open with CTRL-O";
             this.lblStatusSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -276,7 +382,8 @@
             this.hex21.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hex21.Location = new System.Drawing.Point(0, 0);
             this.hex21.Name = "hex21";
-            this.hex21.Size = new System.Drawing.Size(543, 501);
+            this.hex21.QueryHitAddresses = ((System.Collections.Generic.List<int>)(resources.GetObject("hex21.SearchHitAddresses")));
+            this.hex21.Size = new System.Drawing.Size(578, 501);
             this.hex21.TabIndex = 0;
             // 
             // FormTest2
@@ -284,7 +391,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(736, 523);
+            this.ClientSize = new System.Drawing.Size(771, 523);
             this.Controls.Add(this.hex21);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
@@ -295,6 +402,8 @@
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.searchPanel.ResumeLayout(false);
+            this.searchPanel.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -325,5 +434,13 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatusCol;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusRow;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusPosition;
+        private System.Windows.Forms.Panel searchPanel;
+        private System.Windows.Forms.ComboBox typeComboBox;
+        private System.Windows.Forms.RichTextBox searchTextBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ListBox searchResultsListBox;
+        private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.CheckBox alignedSearchCheckBox;
     }
 }
