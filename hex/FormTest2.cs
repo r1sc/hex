@@ -60,18 +60,15 @@ namespace hex {
                 var ofd = new OpenFileDialog {
                     Filter = "All Files (*.*)|*.*"
                 };
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
+                if (ofd.ShowDialog() == DialogResult.OK) {
                     LoadData(ofd.FileName);
                 }
             }
             else if (e.Control && e.KeyCode == Keys.S){
-                var sfd = new SaveFileDialog
-                {
+                var sfd = new SaveFileDialog  {
                     Filter = "All Files (*.*)|*.*"
                 };
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
+                if (sfd.ShowDialog() == DialogResult.OK) {
                     SaveData(sfd.FileName);
                 }
             }
@@ -79,43 +76,68 @@ namespace hex {
               
         }
 
-        private void LoadData(string fileName)
-        {
+        private void LoadData(string fileName) {
             hex21.SetData(File.ReadAllBytes(fileName));
             lblStatusSize.Text = hex21.Data.Length.ToString() + " bytes";
             panel1.Enabled = true;
             searchPanel.Enabled = true;
         }
 
-        private void SaveData(string fileName)
-        {
+        private void SaveData(string fileName) {
             File.WriteAllBytes(fileName,hex21.Data);
         }
 
-        private void searchButton_Click(object sender, EventArgs e)
-        {
-
-            string searchText = searchTextBox.Text; 
-            ///sanitize
-            int dataType = typeComboBox.SelectedIndex;
-            bool aligned = alignedSearchCheckBox.Checked;
-           
-
-            hex21.Search(searchText, dataType, aligned);
-
-            updateResultsListBox();
-          
+        private void searchButton_Click(object sender, EventArgs e) {
+            string searchText = searchTextBox.Text;      
+            if (IsValidInput(searchText.ToUpper(),typeComboBox.SelectedIndex)) {
+                int dataType = typeComboBox.SelectedIndex;
+                bool aligned = alignedSearchCheckBox.Checked;
+                hex21.Search(searchText.ToUpper(), dataType, aligned);
+                updateResultsListBox();
+            }
+            else {
+                MessageBox.Show("Invalid input");
+            }
         }
-        private void updateResultsListBox()
-        {
-            foreach (Int32 i in hex21.QueryHitAddresses)
-            {
-                searchResultsListBox.Items.Clear();
+
+        private void updateResultsListBox() { 
+            searchResultsListBox.Items.Clear();
+            foreach (Int32 i in hex21.QueryHitAddresses){            
                 searchResultsListBox.Items.Add(i.ToString("X8"));
             }
         }
 
-     
+        // jump to selected address in hex view
+        private void searchResultsListBox_SelectedIndexChanged_1(object sender, EventArgs e) {
+            hex21.PositionCursor(hex21.QueryHitAddresses[searchResultsListBox.SelectedIndex]);
+            hex21.RefreshHexFocus();
+        }
 
+        private void hex21_MouseClick(object sender, MouseEventArgs e) {
+            hex21.RefreshHexFocus();
+        }
+
+        private bool IsValidInput(string chars, int dataType)  {           
+            if (chars.Length < 1)
+               return false;
+            if (dataType == (int)Hex2.dataTypes.Byte) {
+                if (chars.Length % 2 == 1) {
+                    return false; //off number of hex characters
+                }            
+                chars = chars.ToUpper();
+                foreach (char c in chars) {
+                    if ((!(c >= '0' && c <= '9') && !(c >= 'A' && c <= 'F')))
+                        return false; //invalid text string
+                }            
+            }
+            else  {
+                chars = chars.ToUpper();
+                foreach (char c in chars) {
+                    if (!((c >= '0' && c <= '9')) && (c != 'E') && (c != '.') &&(c != '-'))
+                        return false; //invalid number
+                }
+            }
+            return true;
+        }
     }
 }

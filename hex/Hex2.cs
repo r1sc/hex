@@ -37,16 +37,16 @@ namespace hex {
             r.NextBytes(Data);
             */
             Data = new byte[0];
-            QueryHitAddresses = new List<Int32>();
             _scrollBar = new VScrollBar();
             _scrollBar.Dock = DockStyle.Right;
             _scrollBar.Scroll += _scrollBar_Scroll;
-            Controls.Add(_scrollBar);
+            Controls.Add(_scrollBar); 
+            QueryHitAddresses = new List<Int32>();
         }
 
         void _scrollBar_Scroll(object sender, ScrollEventArgs e) {
-            Invalidate();
-            UpdateCaret(CurrentPos);
+            Invalidate();       
+            UpdateCaret(CurrentPos);        
         }
 
         public int GetNumberOfColumns() {
@@ -195,6 +195,7 @@ namespace hex {
                 UpdateCaret(idx);
             }
 
+          
             base.OnMouseDown(e);
         }
 
@@ -284,8 +285,7 @@ namespace hex {
 
 
 
-        public void SetData(byte[] data)
-        {
+        public void SetData(byte[] data)  {
             _lastCaretType = 0;
             DestroyCaret();
 
@@ -298,91 +298,47 @@ namespace hex {
 
 
 
-        public void Search(String searchText, int dataType, bool aligned)
-        {
+        public void Search(String searchText, int dataType, bool aligned) {
             QueryHitAddresses.Clear();
 
             int totalBytes = Data.Length;
             byte[] needle = setNeedle(searchText, dataType);
 
-            
-            int jumpLength;
-            if (aligned) jumpLength = 1;
-            else jumpLength = GetAmountOfByte(dataType);
-            //if (dataType == (int)dataTypes.Byte) { jumpLength = needle.Length;} //bytes treated differently since there can be multiple
-            
-           
-            for (Int32 address = 0; address < totalBytes; address += jumpLength) //address in file
-            {
-
+            int jumpLength = GetAmountOfBytes(dataType);
+            if (!aligned) jumpLength = 1;
+                  
+            for (Int32 address = 0; address < totalBytes; address += jumpLength)   {
                 int offset = 0;
-                while ( offset < jumpLength && Data[address + offset] == needle[offset]) //offset of address
-                {
+                while (offset < needle.Length && needle[offset] == Data[address + offset])
                     offset++;
-                }
 
-                if (offset == jumpLength) //all bytes matched
-                {
+                if (offset == needle.Length) {
                     QueryHitAddresses.Add(address);
-                }
+                }           
             }
-
-
-
+            if (QueryHitAddresses.Count > 0) {
+                PositionCursor(QueryHitAddresses[0]);
+                RefreshHexFocus();
+            }
+            else {
+                MessageBox.Show("Not Found");
+            }
+      
         }
 
-        private byte[] setNeedle(String searchText, int dataType)
-        {
-            switch (dataType)
-            {
-                case (int)Hex2.dataTypes.Byte:
-                    {
-                        return ConvertStringOfHexNumbersToBytes(searchText);
-                    }
-                case (int)Hex2.dataTypes.UInt16:
-                    {
-                        return BitConverter.GetBytes(Convert.ToUInt16(searchText));
-                    }
-                case (int)Hex2.dataTypes.Int16:
-                    {
-                        return BitConverter.GetBytes(Convert.ToInt16(searchText));
-                    }
-                case (int)Hex2.dataTypes.UInt32:
-                    {
-                        return BitConverter.GetBytes(Convert.ToUInt32(searchText));
-                    }
-                case (int)Hex2.dataTypes.Int32:
-                    {
-                        return BitConverter.GetBytes(Convert.ToInt32(searchText));
-                    }
-                case (int)Hex2.dataTypes.Float:
-                    {
-                        return BitConverter.GetBytes(Convert.ToSingle(searchText));
-                    }
-                default:
-                    {
-                        return null;
-                    }
-            }
+        //Determine the pattern to look for
+        private byte[] setNeedle(String searchText, int dataType)  {
+            if (dataType == (int)Hex2.dataTypes.Byte) return HexStringToBytes(searchText);
+            else if (dataType == (int)Hex2.dataTypes.UInt16) return BitConverter.GetBytes(Convert.ToUInt16(searchText));
+            else if (dataType == (int)Hex2.dataTypes.Int16) return BitConverter.GetBytes(Convert.ToInt16(searchText));
+            else if (dataType == (int)Hex2.dataTypes.UInt32) return BitConverter.GetBytes(Convert.ToUInt32(searchText));
+            else if (dataType == (int)Hex2.dataTypes.Int32) return BitConverter.GetBytes(Convert.ToInt32(searchText));
+            else if (dataType == (int)Hex2.dataTypes.Float) return BitConverter.GetBytes(Convert.ToSingle(searchText));
+            else return null;
         }
 
-        private byte[] ConvertStringOfHexNumbersToBytes(string s)
-        {
-            byte[] byteArray = new byte[s.Length / 2];
-            for (int index = 0; index < s.Length; index += 2)
-            {
-                int char1Value = GetHexCharValue(s[index]);
-                int char2Value = GetHexCharValue(s[index + 1]);
-
-                byteArray[index / 2] = Convert.ToByte(char1Value * 16 + char2Value);
-            }
-            return byteArray;
-        }
-
-        private int GetHexCharValue(char c)
-        {
-            switch (c)
-            {
+        private int GetHexCharValue(char c) {
+            switch (c) {
                 case '0': return 0;
                 case '1': return 1;
                 case '2': return 2;
@@ -399,15 +355,13 @@ namespace hex {
                 case 'D': return 13;
                 case 'E': return 14;
                 case 'F': return 15;
-                default: return -1;
+                default : return -1;
             }
         }
 
 
-        private int GetAmountOfByte(int dataType)
-        {
-            switch (dataType)
-            {
+        private int GetAmountOfBytes(int dataType) {
+            switch (dataType) {
                 case (int)dataTypes.Byte : return 1;
                 case (int)dataTypes.UInt16: return 2;
                 case (int)dataTypes.Int16: return 2;
@@ -416,7 +370,37 @@ namespace hex {
                 case (int)dataTypes.Float: return 4;
                 default: return -1;
             }
- 
         }
+
+        //this is nesessary to keep the selected position flashing
+        //in the hex columns after the search textbox has taken focus
+        public void RefreshHexFocus() {
+            AsciiSelected = !AsciiSelected;
+            PositionCursor(CurrentPos);
+            AsciiSelected = !AsciiSelected;
+            PositionCursor(CurrentPos);
+        }
+
+        //Takes string of hex characters and returns it as a byte array
+        //Input can only contain hex characters
+        private byte[] HexStringToBytes(string s) {
+            byte[] byteArray = new byte[s.Length / 2];
+            for (int index = 0; index < s.Length; index += 2) {
+                int char1Value = GetHexCharValue(s[index]);
+                int char2Value = GetHexCharValue(s[index + 1]);
+                byteArray[index / 2] = Convert.ToByte(char1Value * 16 + char2Value);
+            }
+            return byteArray;
+        }
+
+        private void InitializeComponent() {
+            this.SuspendLayout();
+            // 
+            // Hex2
+            // 
+            this.Name = "Hex2";
+            this.ResumeLayout(false);
+        }
+
     }
 }
