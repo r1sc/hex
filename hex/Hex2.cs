@@ -112,6 +112,7 @@ namespace hex {
         }
 
         public void PositionCursor(int newpos) {
+            ClearBuffer();
             MakeSurePositionIsVisible(newpos);
             UpdateCaret(newpos);
         }        
@@ -143,7 +144,7 @@ namespace hex {
                 _buffer += upper;
                 if (_buffer.Length == 2) {
                     var num = byte.Parse(_buffer, NumberStyles.HexNumber);
-                    _buffer = string.Empty;
+                    ClearBuffer();
                     Data[CurrentPos] = num;
                     RedrawCurrentByte();
                     PositionCursor(CurrentPos + 1);
@@ -151,11 +152,17 @@ namespace hex {
                 e.Handled = true;
             }
             else if (AsciiSelected && Data.Length > 0) {
+         //   else if (AsciiSelected)
+            
                 Data[CurrentPos] = (byte)e.KeyChar;
                 RedrawCurrentByte();
                 PositionCursor(CurrentPos + 1);
             }
             base.OnKeyPress(e);
+        }
+
+        public void ClearBuffer()  {
+            _buffer = string.Empty;
         }
 
         private void RedrawCurrentByte() {
@@ -166,12 +173,16 @@ namespace hex {
             var charWidth = (int)(Font.Size * 2);
             var asciiStart = charWidth * numColumns;
             rect = new Rectangle(col * charWidth, row * 24, charWidth, 24);
-            Invalidate(rect);
+            Invalidate(rect);       
 
             charWidth = (int)Font.Size;
             asciiStart += charWidth;
             rect = new Rectangle(asciiStart + col * charWidth, row * 24, charWidth, 24);
             Invalidate(rect);
+
+            //redraws the whole section, not sure if there's a better way.
+            Invalidate();
+        
         }
 
         private int _lastCaretType;

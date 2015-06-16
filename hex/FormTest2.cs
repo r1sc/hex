@@ -113,7 +113,7 @@ namespace hex {
             hex21.RefreshHexFocus();
         }
 
-        private void hex21_MouseClick(object sender, MouseEventArgs e) {
+        private void hex21_MouseClick(object sender, MouseEventArgs e) { 
             hex21.RefreshHexFocus();
         }
 
