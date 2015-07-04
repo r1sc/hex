@@ -165,24 +165,22 @@ namespace hex {
             _buffer = string.Empty;
         }
 
-        private void RedrawCurrentByte() {
+        private void RedrawCurrentByte()
+        {
+            var scrollBarPosition = _scrollBar.Value;
             var numColumns = GetNumberOfColumns();
             var row = CurrentPos / numColumns + 1;
             var col = CurrentPos % numColumns;
             Rectangle rect;
             var charWidth = (int)(Font.Size * 2);
             var asciiStart = charWidth * numColumns;
-            rect = new Rectangle(col * charWidth, row * 24, charWidth, 24);
-            Invalidate(rect);       
-
-            charWidth = (int)Font.Size;
-            asciiStart += charWidth;
-            rect = new Rectangle(asciiStart + col * charWidth, row * 24, charWidth, 24);
+            rect = new Rectangle(col * charWidth, (row - scrollBarPosition) * 24, charWidth, 24);
             Invalidate(rect);
 
-            //redraws the whole section, not sure if there's a better way.
-            Invalidate();
-        
+            charWidth = (int)(Font.Size);
+            asciiStart += charWidth;
+            rect = new Rectangle(asciiStart + col * charWidth, ((row - scrollBarPosition) * 24), charWidth, 24);
+            Invalidate(rect);
         }
 
         private int _lastCaretType;
